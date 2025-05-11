@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import ToDoItem from "./ToDoItem";
-//import "./ToDoList.css";
+import "./ToDoList.css";
 import data from "./data.js";
 
 const ToDoList = () => {
@@ -38,7 +38,6 @@ const ToDoList = () => {
   };
   const handleSubmit = (item) => {
     item.preventDefault();
-    console.log(values);
     addItem(values);
 
     setValues({
@@ -49,7 +48,7 @@ const ToDoList = () => {
       category: "",
     });
 
-    /*  // Generar un objeto vacío dinámicamente Copilot
+    /*  // Generar un objeto vacío dinámicamente -- Copilot
   const emptyValues = Object.keys(values).reduce((acc, key) => {
     acc[key] = "";
     return acc;
@@ -61,7 +60,7 @@ const ToDoList = () => {
   const resetItems = () => setItems(data);
 
   return (
-    <section className="todo-list">
+    <section>
       <form onSubmit={handleSubmit}>
         <label htmlFor="day">Day</label>
         <br />
@@ -99,8 +98,11 @@ const ToDoList = () => {
         )}
       </form>
       {paintData()}
-      <button onClick={removeAllItems}>Borrar todo</button>
-      <button onClick={resetItems}>Recargar</button>
+      <div className="botones">
+      <button className="BorrarTodo" onClick={removeAllItems}>Borrar todo</button>
+      <button className="Recargar" onClick={resetItems}>Recargar</button>
+      </div>
+      
     </section>
   );
 };

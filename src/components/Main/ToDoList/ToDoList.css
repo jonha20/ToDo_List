@@ -1,13 +1,80 @@
-article {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    margin: 16px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Center the form */
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-article:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+/* Form styles */
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  padding: 10px;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form b {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+.botones {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 20px;
+  gap: 10px; /* Espaciado entre los botones */
+}
+
+.botones button {
+  flex: 1; /* Para que los botones tengan el mismo ancho */
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.botones button:hover {
+  opacity: 0.8;
+}
+/* Botones de eliminar y editar */
+.BorrarTodo {
+  background-color: #dc3545;
+}
+.Recargar {
+  background-color: #007bff;
 }
