@@ -1,15 +1,10 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ToDoItem from "./ToDoItem";
 import "./ToDoList.css";
 import data from "./data.js";
 
 const ToDoList = () => {
-  // Estado inicial del array de destinos
-  const [items, setItems] = useState(data); // [{},{},{}]
-  console.log(data);
-
-  // Estado inicial del formulario
+  const [items, setItems] = useState(data);
   const [values, setValues] = useState({
     day: "",
     task: "",
@@ -17,14 +12,30 @@ const ToDoList = () => {
     status: "",
     category: "",
   });
+  const [showMessage, setShowMessage] = useState(false); // Estado para el mensaje
+  const [editIndex, setEditIndex] = useState(null); // Estado para rastrear la tarea que se está editando
+  const timeoutRef = useRef(null); // Referencia para el temporizador
 
   const paintData = () =>
     items.map((item, index) => (
-      <ToDoItem key={index} data={item} remove={() => removeItem(index)} />
+      <ToDoItem
+        key={index}
+        data={item}
+        remove={() => removeItem(index)}
+        edit={() => startEditing(index)}
+      />
     ));
+
   const addItem = (new_item) => {
     setItems([...items, new_item]);
   };
+
+  const updateItem = (updated_item, index) => {
+    const updatedItems = [...items];
+    updatedItems[index] = updated_item;
+    setItems(updatedItems);
+  };
+
   const removeItem = (i) => {
     items.splice(i, 1);
     setItems([...items]);
@@ -35,10 +46,22 @@ const ToDoList = () => {
       ...values,
       [item.target.name]: item.target.value,
     });
+
+    // Reiniciar el temporizador al recibir entrada
+    resetTimeout();
   };
+
   const handleSubmit = (item) => {
     item.preventDefault();
-    addItem(values);
+
+    if (editIndex !== null) {
+      // Actualizar tarea existente
+      updateItem(values, editIndex);
+      setEditIndex(null); // Salir del modo de edición
+    } else {
+      // Añadir nueva tarea
+      addItem(values);
+    }
 
     setValues({
       day: "",
@@ -48,61 +71,140 @@ const ToDoList = () => {
       category: "",
     });
 
-    /*  // Generar un objeto vacío dinámicamente -- Copilot
-  const emptyValues = Object.keys(values).reduce((acc, key) => {
-    acc[key] = "";
-    return acc;
-  }, {});
+    setShowMessage(true);
 
-  setValues(emptyValues);*/
+    // Ocultar el mensaje después de 5 segundos
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 5000);
+
+    // Limpiar el temporizador después de enviar
+    clearTimeout(timeoutRef.current);
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setValues(items[index]); // Prellenar el formulario con los datos de la tarea seleccionada
+    resetTimeout(); // Reiniciar el temporizador al iniciar la edición
+  };
+
   const removeAllItems = () => setItems([]);
   const resetItems = () => setItems(data);
+
+  const resetTimeout = () => {
+    // Limpiar el temporizador existente
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Configurar un nuevo temporizador de 10 segundos
+    timeoutRef.current = setTimeout(() => {
+      setValues({
+        day: "",
+        task: "",
+        priority: "",
+        status: "",
+        category: "",
+      });
+    }, 10000);
+  };
+
+  // Limpiar el temporizador al desmontar el componente
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <section>
       <form onSubmit={handleSubmit}>
         <label htmlFor="day">Day</label>
         <br />
-        <input type="text" value={values.day} name="day" onChange={handleChange} />
+        <input
+          type="text"
+          value={values.day}
+          name="day"
+          minLength="6"
+          required
+          onChange={handleChange}
+        />
         <br />
 
         <label htmlFor="task">Task</label>
         <br />
-        <input type="text" value={values.task} name="task" onChange={handleChange} />
+        <input
+          type="text"
+          value={values.task}
+          name="task"
+          minLength="6"
+          required
+          onChange={handleChange}
+        />
         <br />
 
         <label htmlFor="priority">Priority</label>
         <br />
-        <input type="text" value={values.priority} name="priority" onChange={handleChange} />
+        <input
+          type="text"
+          value={values.priority}
+          name="priority"
+          minLength="6"
+          required
+          onChange={handleChange}
+        />
         <br />
 
         <label htmlFor="status">Status</label>
         <br />
-        <input type="text" value={values.status} name="status" onChange={handleChange} />
+        <input
+          type="text"
+          value={values.status}
+          name="status"
+          minLength="6"
+          required
+          onChange={handleChange}
+        />
         <br />
 
         <label htmlFor="category">Category</label>
         <br />
-        <input type="text" value={values.category} name="category" onChange={handleChange} />
+        <input
+          type="text"
+          value={values.category}
+          name="category"
+          minLength="6"
+          required
+          onChange={handleChange}
+        />
         <br />
-
         {values.day &&
         values.task &&
         values.priority &&
         values.status &&
         values.category ? (
-          <button type="submit">Crear destino</button>
+          <button type="submit">
+            {editIndex !== null ? "Guardar cambios" : "Crear destino"}
+          </button>
         ) : (
-          <b>Rellena todos los campos para poder enviar</b>
+          <p>Por favor, completa todos los campos correctamente.</p>
         )}
       </form>
+
+      {/* Mostrar el mensaje si showMessage es true */}
+      {showMessage && <p className="success-message">Tarea añadida</p>}
+
       {paintData()}
       <div className="botones">
-      <button className="BorrarTodo" onClick={removeAllItems}>Borrar todo</button>
-      <button className="Recargar" onClick={resetItems}>Recargar</button>
+        <button className="BorrarTodo" onClick={removeAllItems}>
+          Borrar todo
+        </button>
+        <button className="Recargar" onClick={resetItems}>
+          Recargar
+        </button>
       </div>
-      
     </section>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import "./ToDoItem.css";
 
-const ToDoItem = ({data, remove, update}) => {
+const ToDoItem = ({data, remove, edit}) => {
   const {day, task, priority, status, category} = data
   console.log(data);
   
@@ -12,7 +12,7 @@ const ToDoItem = ({data, remove, update}) => {
     <p>Status: {status}</p>
     <p>Category: {category}</p>
     <button className="remove" onClick={remove}>Borrar</button>
-    <button className="update" onClick={update}>Editar</button>
+    <button className="update" onClick={edit}>Editar</button>
   </article>;
 };
 
