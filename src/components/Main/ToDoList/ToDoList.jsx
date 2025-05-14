@@ -123,14 +123,22 @@ const ToDoList = () => {
       <form onSubmit={handleSubmit}>
         <label htmlFor="day">Day</label>
         <br />
-        <input
+        <select
           type="text"
           value={values.day}
           name="day"
           minLength="6"
           required
-          onChange={handleChange}
-        />
+          onChange={handleChange}>
+          <option value="">Select a day</option>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        </select>
         <br />
 
         <label htmlFor="task">Task</label>
@@ -147,14 +155,18 @@ const ToDoList = () => {
 
         <label htmlFor="priority">Priority</label>
         <br />
-        <input
+        <select
           type="text"
           value={values.priority}
           name="priority"
-          minLength="6"
           required
-          onChange={handleChange}
-        />
+          onChange={handleChange}>
+          <option value="">Select a priority</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+          <option value="Urgent">Urgent</option>
+        </select>
         <br />
 
         <label htmlFor="status">Status</label>
