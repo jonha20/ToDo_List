@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import ToDoItem from "./ToDoItem";
 import "./ToDoList.css";
 import data from "./data.js";
+import { v4 as uuidv4 } from 'uuid';
 
 const ToDoList = () => {
   const [items, setItems] = useState(data);
@@ -19,10 +20,12 @@ const ToDoList = () => {
   const paintData = () =>
     items.map((item, index) => (
       <ToDoItem
-        key={index}
+        key={uuidv4()}
         data={item}
         remove={() => removeItem(index)}
         edit={() => startEditing(index)}
+        complete={() => complete(index)}
+        pending={() => pending(index)}
       />
     ));
 
@@ -34,6 +37,18 @@ const ToDoList = () => {
     const updatedItems = [...items];
     updatedItems[index] = updated_item;
     setItems(updatedItems);
+  };
+
+  const complete = (i) => {
+    const completeItems = [...items];
+    completeItems[i].status = "Completed";
+    setItems(completeItems);
+  };
+
+  const pending = (i) => {
+    const pendingItems = [...items];
+    pendingItems[i].status = "Pending";
+    setItems(pendingItems);
   };
 
   const removeItem = (i) => {
@@ -129,7 +144,8 @@ const ToDoList = () => {
           name="day"
           minLength="6"
           required
-          onChange={handleChange}>
+          onChange={handleChange}
+        >
           <option value="">Select a day</option>
           <option value="Monday">Monday</option>
           <option value="Tuesday">Tuesday</option>
@@ -160,7 +176,8 @@ const ToDoList = () => {
           value={values.priority}
           name="priority"
           required
-          onChange={handleChange}>
+          onChange={handleChange}
+        >
           <option value="">Select a priority</option>
           <option value="High">High</option>
           <option value="Medium">Medium</option>
@@ -171,14 +188,18 @@ const ToDoList = () => {
 
         <label htmlFor="status">Status</label>
         <br />
-        <input
+        <select
           type="text"
           value={values.status}
           name="status"
           minLength="6"
           required
           onChange={handleChange}
-        />
+        >
+          <option value="">Select a status</option>
+          <option value="Pending">Pending</option>
+          <option value="Complete">Complete</option>
+        </select>
         <br />
 
         <label htmlFor="category">Category</label>

@@ -21,17 +21,23 @@ article button {
   border-radius: 4px;
   cursor: pointer;
 }
-.remove {
+.delete {
   background-color: rgb(179, 35, 35);
 }
 
-remove:hover {
+.delete:hover {
   background-color: rgb(255, 0, 0);
 }
 
-.update {
+.edit {
   background-color: rgb(35, 179, 35);
 }
-update:hover {
+.edit:hover {
   background-color: rgb(0, 255, 0);
+}
+.complete, .pending {
+  background-color: rgb(132, 0, 255);
+}
+.complete:hover , .pending:hover{
+  background-color: rgb(153, 0, 255);
 }
